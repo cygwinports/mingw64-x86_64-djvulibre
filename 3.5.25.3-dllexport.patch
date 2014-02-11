@@ -1,0 +1,53 @@
+--- origsrc/djvulibre-3.5.25/libdjvu/DjVuGlobal.h	2012-05-07 21:56:53.000000000 -0500
++++ src/djvulibre-3.5.25/libdjvu/DjVuGlobal.h	2014-02-11 00:55:41.727982900 -0600
+@@ -73,9 +73,9 @@ inline void * operator new(size_t, void
+ #endif
+ 
+ #ifdef WIN32
+-# ifdef DLL_EXPORT
++# if defined(INSIDE_DJVU) && defined(DLL_EXPORT)
+ #  define DJVUAPI __declspec(dllexport)
+-# else
++# elif !defined(INSIDE_DJVU)
+ #  define DJVUAPI __declspec(dllimport)
+ # endif
+ #endif
+--- origsrc/djvulibre-3.5.25/libdjvu/Makefile.in	2012-05-07 21:56:53.000000000 -0500
++++ src/djvulibre-3.5.25/libdjvu/Makefile.in	2014-02-11 01:21:04.279415800 -0600
+@@ -40,7 +40,7 @@ INSTALL_PROGRAM = @INSTALL_PROGRAM@
+ INSTALL_DATA = @INSTALL_DATA@
+ LIBTOOL = @LIBTOOL@
+ 
+-DEFS = @DEFS@
++DEFS = @DEFS@ -DINSIDE_DJVU
+ OPTS = @OPTS@
+ CXXRPOFLAGS = @CXXRPOFLAGS@
+ JPEG_LIBS=@JPEG_LIBS@
+--- origsrc/djvulibre-3.5.25/libdjvu/ddjvuapi.h	2012-05-07 21:56:53.000000000 -0500
++++ src/djvulibre-3.5.25/libdjvu/ddjvuapi.h	2014-02-11 00:58:25.558580500 -0600
+@@ -70,9 +70,9 @@ extern "C" {
+ 
+ #ifndef DDJVUAPI
+ # ifdef WIN32
+-#  ifdef DLL_EXPORT
++#  if defined(INSIDE_DJVU) && defined(DLL_EXPORT)
+ #   define DDJVUAPI __declspec(dllexport)
+-#  else
++#  elif !defined(INSIDE_DJVU)
+ #   define DDJVUAPI __declspec(dllimport)
+ #  endif
+ # endif
+--- origsrc/djvulibre-3.5.25/libdjvu/miniexp.h	2012-05-07 21:56:53.000000000 -0500
++++ src/djvulibre-3.5.25/libdjvu/miniexp.h	2014-02-11 01:01:42.983859300 -0600
+@@ -28,9 +28,9 @@ extern "C" {
+ 
+ #ifndef MINILISPAPI
+ # ifdef WIN32
+-#  ifdef DLL_EXPORT
++#  if defined(INSIDE_DJVU) && defined(DLL_EXPORT)
+ #   define MINILISPAPI __declspec(dllexport)
+-#  else
++#  elif !defined(INSIDE_DJVU)
+ #   define MINILISPAPI __declspec(dllimport)
+ #  endif
+ # endif

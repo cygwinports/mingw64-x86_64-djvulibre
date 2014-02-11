@@ -1,0 +1,46 @@
+CROSS_HOST="x86_64-w64-mingw32"
+inherit cross
+
+NAME="mingw64-x86_64-djvulibre"
+VERSION=3.5.25.3
+RELEASE=1
+CATEGORY="Devel"
+SUMMARY="DjVu document library for Win64 toolchain"
+DESCRIPTION="DjVu is a set of compression technologies, a file format, and a
+software platform for the delivery over the Web of digital documents, scanned
+documents, and high resolution images."
+HOMEPAGE="http://djvu.sourceforge.net/"
+SRC_URI="mirror://sourceforge/djvu/djvulibre-${VERSION}.tar.gz"
+SRC_DIR="djvulibre-${VERSION%.*}"
+PATCH_URI="
+	https://build.opensuse.org/source/windows:mingw:win64/mingw64-djvulibre/djvulibre-3.5.22-exeext.patch
+	https://build.opensuse.org/source/windows:mingw:win64/mingw64-djvulibre/djvulibre-3.5.25-precision.patch
+	https://build.opensuse.org/source/windows:mingw:win64/mingw64-djvulibre/djvulibre-3.5.22-msvcp60.patch
+	https://build.opensuse.org/source/windows:mingw:win64/mingw64-djvulibre/djvulibre-3.5.23-size_t.patch
+	3.5.25.3-dllexport.patch
+"
+
+DISTCLEANFILES="aclocal.m4 config/l*.m4"
+ACLOCAL_FLAGS="-I config"
+
+src_compile() {
+	cd ${S}
+	cygautoreconf
+
+	cd ${B}
+	cygconf \
+		--disable-xmltools \
+		--with-jpeg \
+		--with-tiff \
+		--disable-djview --without-qt \
+		--enable-threads=pthread \
+		LIBS=-liconv
+	cygmake
+}
+
+src_install() {
+	cd ${B}
+	cygmake install-libdjvu DESTDIR=${D}
+}
+
+KEEP_LA_FILES="none"
