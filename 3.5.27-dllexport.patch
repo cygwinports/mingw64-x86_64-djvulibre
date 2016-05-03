@@ -1,0 +1,10 @@
+--- origsrc/djvulibre-3.5.27/libdjvu/Makefile.am	2015-02-10 21:02:19.000000000 -0600
++++ src/djvulibre-3.5.27/libdjvu/Makefile.am	2016-05-03 17:19:25.955284500 -0500
+@@ -33,6 +33,7 @@ libdjvulibre_la_LIBADD = $(JPEG_LIBS) $(
+ libdjvulibre_la_LDFLAGS = -no-undefined -version-info $(version_info)
+ 
+ if HAVE_OS_WIN32
++libdjvulibre_la_CPPFLAGS += -DDJVUAPI_EXPORT -DDDJVUAPI_EXPORT -DMINILISPAPI_EXPORT
+ libdjvulibre_la_LDFLAGS += -Wl,--export-all-symbols
+ endif
+ 
